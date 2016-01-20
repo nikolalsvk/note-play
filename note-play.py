@@ -1,12 +1,13 @@
 
 # coding: utf-8
 
-# In[122]:
+# In[222]:
 
 __author__ = 'Nikola Djuza RA6-2012'
 
 get_ipython().magic(u'matplotlib inline')
 import numpy as np
+import collections
 import sys
 import cv2
 import scipy as sc
@@ -18,10 +19,7 @@ from sklearn.cluster import KMeans
 from midiutil.MidiFile import MIDIFile
 
 
-# In[123]:
-
-def load_image(path):
-    return cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
+# In[223]:
 
 def display_image(image, color = False):
     if color:
@@ -30,16 +28,15 @@ def display_image(image, color = False):
         plt.imshow(image, 'gray')
 
 def load_and_prepare_image(image_path):
-    image = load_image(image_path)
-    
+    image = cv2.imread(image_path)
     ret, image_bin = cv2.threshold(image, 200, 255, cv2.THRESH_BINARY)
 
     return image_bin
 
 
-# In[124]:
+# In[224]:
 
-def createFiveline(image):
+def create_fiveline(image):
     edges = cv2.Canny(image, 50, 150, apertureSize=3)
 
     ys = list()
@@ -47,13 +44,11 @@ def createFiveline(image):
     maxLineGap = 30
 
     lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 70, minLineLength, maxLineGap)
-        
-
     
     for line in lines:
         for x1, y1, x2, y2 in line:
+            cv2.line(image, (x1,y1), (x2,y2), (0, 255, 0), 2)
             if (abs(y1 - y2 < 4)):
-                cv2.line(image, (x1,y1), (x2,y2), (0, 255, 0), 2)
                 innerlist = list()
                 innerlist.append((y1 + y2) / 2)
                 ys.append(innerlist)
@@ -69,19 +64,37 @@ def createFiveline(image):
         fiveline.append(innerlist[0])
 
     fiveline.sort()
-    return img
+    print fiveline
+    return fiveline
 
 
-# In[125]:
+# In[225]:
+
+def create_checks(fiveline):
+    checks = list()
+    dist = abs(fiveline[1] - fiveline[0])
+    
+    for line in fiveline:
+        checks.append(int(line - (dist / 4)))
+        checks.append(int(line + (dist / 4)))
+
+    checks.sort()
+    checks.reverse()
+    return checks
+
+
+# In[226]:
 
 img = load_and_prepare_image('images/test.png')
-img = cv2.imread('images/test.png');
-plt.imshow(img, 'gray')
 
-# fiveline = createFiveline(img)
+height, width = img.shape[:2]
+
+fiveline = create_fiveline(img)
+
+checks = create_checks(fiveline)
 
 
 # In[ ]:
 
-
+get_ipython().system(u'ipython nbconvert --to script note-play.ipynb')
 
