@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[23]:
+# In[9]:
 
 __author__ = 'Nikola Djuza RA6-2012'
 
@@ -19,7 +19,7 @@ from sklearn.cluster import KMeans
 from midiutil.MidiFile import MIDIFile
 
 
-# In[24]:
+# In[10]:
 
 def display_image(image, color = False):
     if color:
@@ -34,7 +34,7 @@ def load_and_prepare_image(image_path):
     return image_bin
 
 
-# In[25]:
+# In[11]:
 
 def create_fiveline(image):
     edges = cv2.Canny(image, 50, 150, apertureSize=3)
@@ -68,7 +68,7 @@ def create_fiveline(image):
     return fiveline
 
 
-# In[26]:
+# In[12]:
 
 def create_checks(fiveline):
     checks = list()
@@ -83,7 +83,7 @@ def create_checks(fiveline):
     return checks
 
 
-# In[27]:
+# In[13]:
 
 def create_bars_coordinates(img, fiveline, checks):
     barsBegins = list();
@@ -138,7 +138,7 @@ def create_bars_coordinates(img, fiveline, checks):
     return barsBegins, barsEnds
 
 
-# In[28]:
+# In[14]:
 
 def find_all_notes(noteValues, img, checks, barsBegins, barsEnds):
     iTunes = list()
@@ -224,7 +224,7 @@ def find_all_notes(noteValues, img, checks, barsBegins, barsEnds):
     return iTunes
 
 
-# In[29]:
+# In[15]:
 
 def export_tunes_to_MIDI_file(iTunes, outputPath):
     MyMIDI = MIDIFile(1)
@@ -252,31 +252,34 @@ def export_tunes_to_MIDI_file(iTunes, outputPath):
     binfile.close()
 
 
-# In[30]:
+# In[16]:
 
-img_path = 'images/test.png'
-img = load_and_prepare_image(img_path)
-noteValues = (52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83)
+def create_MIDI_file_from_img(img_path, note_values):
+    FU
+    img = load_and_prepare_image(img_path)
 
-height, width = img.shape[:2]
+    height, width = img.shape[:2]
 
-fiveline = create_fiveline(img)
+    fiveline = create_fiveline(img)
 
-checks = create_checks(fiveline)
+    checks = create_checks(fiveline)
 
-barsBegins, barsEnds = create_bars_coordinates(img, fiveline, checks)
+    barsBegins, barsEnds = create_bars_coordinates(img, fiveline, checks)
 
-iTunes = find_all_notes(noteValues, img, checks, barsBegins, barsEnds)
+    iTunes = find_all_notes(note_values, img, checks, barsBegins, barsEnds)
 
-export_tunes_to_MIDI_file(iTunes, 'images/test.png' + ".mid")
+    export_tunes_to_MIDI_file(iTunes, img_path + ".mid")
+
+
+# In[22]:
+
+note_values = (52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83)
+
+create_MIDI_file_from_img('test', note_values)
+create_MIDI_file_from_img('notes', note_values)
 
 
 # In[ ]:
 
 get_ipython().system(u'ipython nbconvert --to script note-play.ipynb')
-
-
-# In[ ]:
-
-
 
