@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[24]:
+# In[2]:
 
 __author__ = 'Nikola Djuza RA6-2012'
 
@@ -19,7 +19,7 @@ from sklearn.cluster import KMeans
 from midiutil.MidiFile import MIDIFile
 
 
-# In[25]:
+# In[3]:
 
 def display_image(image, color = False):
     if color:
@@ -34,7 +34,7 @@ def load_and_prepare_image(image_path):
     return image_bin
 
 
-# In[26]:
+# In[4]:
 
 def create_fiveline(image):
     edges = cv2.Canny(image, 50, 150, apertureSize=3)
@@ -68,7 +68,7 @@ def create_fiveline(image):
     return fiveline
 
 
-# In[27]:
+# In[5]:
 
 def create_checks(fiveline):
     checks = list()
@@ -83,7 +83,7 @@ def create_checks(fiveline):
     return checks
 
 
-# In[28]:
+# In[6]:
 
 def create_bars_coordinates(img, fiveline, checks):
     barsBegins = list();
@@ -138,7 +138,7 @@ def create_bars_coordinates(img, fiveline, checks):
     return barsBegins, barsEnds
 
 
-# In[29]:
+# In[7]:
 
 def find_all_notes(noteValues, img, checks, barsBegins, barsEnds):
     iTunes = list()
@@ -224,7 +224,7 @@ def find_all_notes(noteValues, img, checks, barsBegins, barsEnds):
     return iTunes
 
 
-# In[30]:
+# In[8]:
 
 def export_tunes_to_MIDI_file(iTunes, outputPath):
     MyMIDI = MIDIFile(1)
@@ -252,7 +252,7 @@ def export_tunes_to_MIDI_file(iTunes, outputPath):
     binfile.close()
 
 
-# In[31]:
+# In[15]:
 
 def create_MIDI_file_from_img(img_path, note_values):
     full_img_path = 'images/' + img_path + '.png'
@@ -271,22 +271,26 @@ def create_MIDI_file_from_img(img_path, note_values):
     export_tunes_to_MIDI_file(iTunes, 'images/' + img_path + ".mid")
 
 
-# In[34]:
+# In[23]:
 
 note_values = (52, 53, 55, 57, 59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83)
 
-create_MIDI_file_from_img('test', note_values)
-create_MIDI_file_from_img('notes', note_values)
+#create_MIDI_file_from_img('test', note_values)
+#create_MIDI_file_from_img('notes', note_values)
 create_MIDI_file_from_img('bibermore_notes', note_values)
-create_MIDI_file_from_img('brankamore_notes', note_values)
+#create_MIDI_file_from_img('brankamore_notes', note_values)
 create_MIDI_file_from_img('brankatest', note_values)
 create_MIDI_file_from_img('more_notes', note_values)
-create_MIDI_file_from_img('more_notes-1', note_values)
-create_MIDI_file_from_img('notes-1', note_values)
-create_MIDI_file_from_img('more_notes-1', note_values)
+#create_MIDI_file_from_img('more_notes-1', note_values)
+#create_MIDI_file_from_img('notes-1', note_values)
 
 
-# In[33]:
+# In[20]:
 
 get_ipython().system(u'ipython nbconvert --to script note-play.ipynb')
+
+
+# In[ ]:
+
+
 
